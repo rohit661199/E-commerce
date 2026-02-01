@@ -11,13 +11,24 @@ import Placeorder from './pages/Placeorder';
 import Cart from './pages/Cart';
 import Profile from './pages/Profile';   // 👈 THIS LINE IMPORTANT
 import Navbar from './components/Navbar';
+import useGetCurrentUser from './hooks/useGetCurrentUser';
 
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch } from 'react-redux';
+import Footer from './components/Footer';
 
+
+
+export const serverUrl="http://localhost:4000"
+console.log("hello ")
 const App = () => {
+ 
+  useGetCurrentUser();
+
   return (
+
     <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
       <ToastContainer />
       <Navbar />
@@ -34,6 +45,7 @@ const App = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/profile" element={<Profile />} />  {/* 👈 */}
       </Routes>
+      <Footer/>
 
     </div>
   );

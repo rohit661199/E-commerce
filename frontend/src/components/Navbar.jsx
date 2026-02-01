@@ -1,6 +1,7 @@
 import { assets } from "../assets/frontend-assests/assets";
-import { Link, NavLink } from "react-router-dom";
-import {  useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
+
 
 
 function Navbar() {
@@ -10,17 +11,10 @@ function Navbar() {
   const logout = () => {
 
   };
-  const setShowSearch = (value) => {
-    if (value) {
-      value = false;
-    } else {
-      value = true;
-    }
-  }
-  const getCartCount = () => {
-    return 0;
-  }
-  const token = true;
+  const setShowSearch = () => {};
+  const getCartCount = () => 0;
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
   
 
   return (
@@ -71,7 +65,9 @@ function Navbar() {
             {/* PROFILE */}
             <div className="group relative">
               <img
-                onClick={() => (token ? null : navigate("/login"))}
+                onClick={() => {
+                  if (!token) navigate("/login");
+                }}
                 src={assets.profile_icon}
                 className="w-5 cursor-pointer hover:scale-110 transition"
                 alt="profile"
@@ -80,7 +76,7 @@ function Navbar() {
               {token && (
                 <div className="hidden group-hover:block absolute right-0 pt-4">
                   <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded shadow">
-                    <p className="cursor-pointer hover:text-black">My Profile</p>
+                    <p onClick={() => navigate("/profile")} className="cursor-pointer hover:text-black">My Profile</p>
                     <p
                       onClick={() => navigate("/orders")}
                       className="cursor-pointer hover:text-black"

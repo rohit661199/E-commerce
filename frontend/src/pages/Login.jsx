@@ -1,34 +1,75 @@
 import {  useEffect, useState } from 'react';
-
+import axios from 'axios';
+import { serverUrl} from '../App';
 import { toast } from 'react-toastify';
+import { setUserData } from '../redux/userSlice';
+import { useDispatch } from 'react-redux';
 
 
 
 const Login = () => {
   const [currentState, setCurrentState] = useState('Login');
-  
+  const dispatch=useDispatch()
   
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+
+
  
 
 
 
 
   const onSubmitHandler = async (event) =>{
+    event.preventDefault();
+    try {
+      if (currentState === 'Sign Up'){
+        const response = await axios.post(serverUrl + '/api/user/register',{
+          name,
+          email,
+          password
+        })
+        if(response.data.success){
+
+        toast.success("Registered Successfully")
+          localStorage.setItem('token', response.data.token);
+          console.log(response.data.user);
+          dispatch(setUserData(response.data.user));
+          console.log(response.data.user);
+        } else {
+          toast.error(response.data.message)
+        }
+        
+      } else {
+
+        const response = await axios.post(serverUrl + '/api/user/login',{
+          email,
+          password
+        })
+    
+        if(response.data.success){
+          toast.success("Logged in Successfully")
+
+          localStorage.setItem('token', response.data.token);
+          console.log(response.data.user);
+          dispatch(setUserData(response.data.user));
+          console.log(response.data.user);
+          
+        } else {
+          toast.error(response.data.message)
+        }
+      }
+      
+    } catch (error){
+      console.log(error);
+      toast.error(error.message);
+    }
     
   }
 
 
 
-  // Redirect to home page if token is set
-  // This will happen when user is logged in
-useEffect(() =>{
-if(token){
-  navigate('/')
-}
-},[token])
 
 
 
